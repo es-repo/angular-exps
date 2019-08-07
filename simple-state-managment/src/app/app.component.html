@@ -1,0 +1,82 @@
+<section class="hero is-bold is-info">
+
+  <div class="hero-head">
+    <nav class="navbar">
+      <div class="container">
+        <div class="navbar-brand">
+          <h1 class="title is-2">Angular</h1>
+          <span class="navbar-burger burger" data-target="navbarMenuHeroB">
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
+        </div>
+        <div id="navbarMenuHeroB" class="navbar-menu">
+          <div class="navbar-end">
+            <a class="navbar-item is-active">
+              Home
+            </a>
+            <a class="navbar-item">
+              Users
+            </a>
+            <a class="navbar-item">
+              Products
+            </a>
+            <span class="navbar-item">
+              <a class="button is-info is-inverted" href="https://github.com/es-repo/angular-exps">
+                <span class="icon">
+                  <i class="fab fa-github"></i>
+                </span>
+                <span>Download</span>
+              </a>
+            </span>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </div>
+
+  <div class="hero-body">
+    <div class="container has-text-centered">
+      <h1 class="title">
+        Welcome to {{ title }}
+      </h1>
+      <h2 class="subtitle">
+        State management experiment
+      </h2>
+    </div>
+  </div>
+</section>
+
+<br>
+
+<section class="container">
+  <app-user-profile-grid 
+    [profiles]="userProfiles$ | async"
+    [profilesDeletingInProgress]="userProfilesDeletingInProgress$ | async"></app-user-profile-grid>
+  <br>
+  <app-user-profile-list 
+    [profiles]="userProfiles$ | async"
+    [profilesDeletingInProgress]="userProfilesDeletingInProgress$ | async"
+    (save)="saveUserProfile($event)"
+    (delete)="deleteUserProfile($event)"></app-user-profile-list>
+</section>
+
+<br>
+
+<footer class="footer">
+  <div class="has-text-centered">
+    <p>Here are some links to help you start</p>
+    <br>
+  </div>
+  <nav class="level">
+    <a target="_blank" rel="noopener" href="https://angular.io/tutorial"
+      class="level-item heading has-text-centered">Tour
+      of Heroes</a>
+    <a target="_blank" rel="noopener" href="https://angular.io/cli" class="level-item heading has-text-centered">CLI
+      Documentation</a>
+    <a target="_blank" rel="noopener" href="https://blog.angular.io/"
+      class="level-item heading has-text-centered">Angular
+      blog</a>
+  </nav>
+</footer>

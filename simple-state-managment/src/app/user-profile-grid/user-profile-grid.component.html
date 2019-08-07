@@ -1,0 +1,28 @@
+<h2 class="heading">user grid</h2>
+<app-loading-indicator *ngIf="profiles === undefined"></app-loading-indicator>
+<table style="width:100%">
+  <tr>
+    <th>Picture</th>
+    <th>User Name</th>
+    <th>Full Name</th>
+    <th></th>
+  </tr>
+  <tr *ngFor="let profile of profiles" style="border:lightgrey solid 1px;">
+    <td style="padding:2px;vertical-align:middle">
+      <img [src]="profile.pictureUrl" class="image is-32x32">
+    </td>
+    <td style="padding:2px;vertical-align:middle">@{{profile.identity.username}}</td>
+    <td style="padding:2px;vertical-align:middle">{{profile.firstName | titlecase}} {{profile.lastName | titlecase}}
+    </td>
+    <td style="float:right">
+        <a class="button is-outlined is-small fix-width" 
+        [class.is-loading]="isProfileDeletionInProgress(profile)"
+        (click)="onDelete(profile)">
+        <span>Delete</span>
+        <span class="icon is-small">
+          <i class="fas fa-trash"></i>
+        </span>
+      </a>
+    </td>
+  </tr>
+</table>

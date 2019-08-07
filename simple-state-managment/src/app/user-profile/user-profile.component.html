@@ -1,0 +1,32 @@
+<form [formGroup]="formGroup" class="card">
+  <div style="float:right;">
+    <app-action-button-panel 
+      [actionInProgress]="actionInProgress"
+      (edit)="onEdit()" 
+      (save)="onSave()"
+      (delete)="onDelete()"
+      (cancel)="onCancel()"></app-action-button-panel>
+  </div>
+  <div class="card-content">
+    <div class="media">
+      <div class="media-left">
+        <figure class="image is-128x128">
+          <img [src]="profile.pictureUrl">
+        </figure>
+      </div>
+      <div class="media-content">
+        <p >
+          <span 
+            class="title is-4" 
+            [style.display]="(isEditMode | async) ? 'none' : ''">{{formGroup.value.fullName}}</span>
+          <input type="text"
+            class="title is-4" 
+            [style.display]="(isEditMode | async) ? '' : 'none'"
+            formControlName="fullName"></p>
+        <p class="subtitle is-4">@{{profile.identity.username}}</p>
+        <p>{{profile.identity.email}}</p>
+        <time>{{profile.birthdate | date}}</time>
+      </div>
+    </div>
+  </div>
+</form>

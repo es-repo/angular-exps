@@ -1,0 +1,36 @@
+<div [style.display]="(isEditMode | async) ? 'none' : ''">
+  <div class="buttons has-addons">
+    <a class="button is-outlined is-small fix-width" (click)="onEdit()">
+      <span>Edit</span>
+      <span class="icon is-small">
+        <i class="fas fa-edit"></i>
+      </span>
+    </a>
+    <a class="button is-outlined is-small fix-width" 
+      [class.is-loading]="isDeleteInProgress"
+      (click)="onDelete()">
+      <span>Delete</span>
+      <span class="icon is-small">
+        <i class="fas fa-trash"></i>
+      </span>
+    </a>
+  </div>
+</div>
+<div [style.display]="(isEditMode | async) ? '' : 'none'">
+  <div class="buttons has-addons">
+    <a class="button is-outlined is-small fix-width" 
+      [class.is-loading]="isSaveInProgress"  
+      (click)="onSave()">
+      <span>Save</span>
+      <span class="icon is-small">
+        <i class="fas fa-save"></i>
+      </span>
+    </a>
+    <a class="button is-outlined is-small fix-width" (click)="onCancel()">
+      <span>Cancel</span>
+      <span class="icon is-small">
+        <i class="fas fa-times"></i>
+      </span>
+    </a>
+  </div>
+</div>
