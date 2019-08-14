@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { UserProfile } from '../user-profile';
 import { ActionType } from '../action-button-panel/action-button-panel.component';
+import { UserProfileStoreItem } from '../user-profile-store-item';
 
 @Component({
   selector: 'app-user-profile-list',
@@ -10,8 +11,7 @@ import { ActionType } from '../action-button-panel/action-button-panel.component
 })
 export class UserProfileListComponent implements OnInit {
 
-  @Input() profiles: UserProfile[] = [];
-  @Input() profilesDeletingInProgress: UserProfile[] = [];
+  @Input() storeItems: UserProfileStoreItem[] = [];
 
   @Output() save = new EventEmitter<UserProfile>();
   @Output() delete = new EventEmitter<UserProfile>();
@@ -27,9 +27,5 @@ export class UserProfileListComponent implements OnInit {
 
   onDelete(profile: UserProfile) {
     this.delete.emit(profile);
-  }
-
-  getProfileActionInProgress(profile: UserProfile): ActionType | undefined {
-    return this.profilesDeletingInProgress.indexOf(profile) !== -1 ? 'delete' : undefined;
   }
 }

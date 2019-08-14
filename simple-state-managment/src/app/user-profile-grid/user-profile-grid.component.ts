@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
 import { UserProfile } from '../user-profile';
 import { UserProfileStoreService } from '../user-profile-store.service';
+import { UserProfileStoreItem } from '../user-profile-store-item';
 
 @Component({
   selector: 'app-user-profile-grid',
@@ -10,21 +11,19 @@ import { UserProfileStoreService } from '../user-profile-store.service';
 })
 export class UserProfileGridComponent implements OnInit {
 
-  @Input() profiles: UserProfile[] = [];
-  @Input() profilesDeletingInProgress: UserProfile[] = [];
+  @Input() storeItems: UserProfileStoreItem[] = [];
 
   constructor(private profileStoreService: UserProfileStoreService) { }
 
   ngOnInit() {
-    // console.log(this.profilesDeletingInProgress);
   }
 
-  onDelete(profile: UserProfile) {
-    this.profileStoreService.delete(profile)
+  onDelete(storeItem: UserProfileStoreItem) {
+    this.profileStoreService.delete(storeItem.data)
       .subscribe();
   }
 
-  isProfileDeletionInProgress(profile: UserProfile) {
-    return this.profilesDeletingInProgress.findIndex(e => profile === e) !== -1;
+  isProfileDeletionInProgress(storeItem: UserProfileStoreItem) {
+    return storeItem.actionInProgress === 'delete';
   }
 }

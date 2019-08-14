@@ -51,12 +51,10 @@
 
 <section class="container">
   <app-user-profile-grid 
-    [profiles]="userProfiles$ | async"
-    [profilesDeletingInProgress]="userProfilesDeletingInProgress$ | async"></app-user-profile-grid>
+    [storeItems]="userProfilesStoreItems$ | async"></app-user-profile-grid>
   <br>
   <app-user-profile-list 
-    [profiles]="userProfiles$ | async"
-    [profilesDeletingInProgress]="userProfilesDeletingInProgress$ | async"
+    [storeItems]="userProfilesStoreItems$ | async"
     (save)="saveUserProfile($event)"
     (delete)="deleteUserProfile($event)"></app-user-profile-list>
 </section>

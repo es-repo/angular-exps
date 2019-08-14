@@ -3,6 +3,7 @@ import { UserProfileDataSourceService } from './user-profile-data-source.service
 import { Observable, BehaviorSubject } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 
+import { UserProfileStoreItem, create as createStoreItem } from './user-profile-store-item';
 import { UserProfile } from './user-profile';
 
 @Injectable({
@@ -10,85 +11,82 @@ import { UserProfile } from './user-profile';
 })
 export class UserProfileStoreService {
 
-  private dataCache = new BehaviorSubject<UserProfile[] | undefined>(undefined);
-  private deletingInProgress = new BehaviorSubject<UserProfile[]>([]);
+  private cache = new BehaviorSubject<UserProfileStoreItem[] | undefined>(undefined);
 
   constructor(private dataSource: UserProfileDataSourceService) { }
 
-  getAll(): Observable<UserProfile[] | undefined> {
+  getAll(): Observable<UserProfileStoreItem[] | undefined> {
     if (!this.isDataCacheValid) {
-      this.dataSource.getAll().subscribe(data => this.dataCache.next(data));
+      this.dataSource.getAll()
+        .pipe(
+           map(data => data.map(createStoreItem))
+        ).subscribe(items => this.cache.next(items));
     }
 
-    return this.dataCache.asObservable();
+    return this.cache.asObservable();
   }
 
-  save(profile: UserProfile): Observable<UserProfile> {
+  save(profile: UserProfile): Observable<UserProfileStoreItem> {
+    this.cache.next(
+      updateItem(
+        this.cacheValue, { data: profile, actionInProgress: 'save' }));
+
     return this.dataSource.save(profile)
       .pipe(
-        tap(() => this.dataCache.next(update(this.dataCacheValue, profile)),
-        map(() => profile)));
+        tap(() => this.cache.next(
+          updateItem(this.cacheValue, Object.assign({}, { data: profile, actionInProgress: null }))))
+        );
   }
 
   delete(profile: UserProfile): Observable<any> {
-    this.deletingInProgress.next(add(this.deletingInProgress.getValue(), profile) as UserProfile[]);
+    this.cache.next(
+      updateItem(
+        this.cacheValue, { data: profile, actionInProgress: 'delete' }));
 
     return this.dataSource.delete(profile)
       .pipe(
-        tap(() => this.dataCache.next(deleteFrom(this.dataCacheValue, profile))),
-        tap(() => this.deletingInProgress.next(deleteFrom(this.deletingInProgress.getValue(), profile) as UserProfile[]))
+        tap(() => this.cache.next(
+          deleteItem(this.cacheValue, profile)))
       );
   }
 
-  getDeletingInProgress(): Observable<UserProfile[]> {
-    return this.deletingInProgress.asObservable();
-  }
-
   private get isDataCacheValid(): boolean {
-    return this.dataCacheValue !== undefined;
+    return this.cacheValue !== undefined;
   }
 
-  private get dataCacheValue(): UserProfile[] | undefined {
-    return this.dataCache.getValue();
+  private get cacheValue(): UserProfileStoreItem[] | undefined {
+    return this.cache.getValue();
   }
 }
 
-function add(profiles: UserProfile[] | undefined, profile: UserProfile): UserProfile[] | undefined {
-  if (profiles === undefined) {
-    return profiles;
+function updateItem(items: UserProfileStoreItem[] | undefined, item: UserProfileStoreItem): UserProfileStoreItem[] | undefined {
+  if (items === undefined) {
+    return items;
   }
 
-  return [...profiles, profile];
-}
-
-function update(profiles: UserProfile[] | undefined, profile: UserProfile): UserProfile[] | undefined {
-  if (profiles === undefined) {
-    return profiles;
-  }
-
-  const index = profiles.findIndex(i => i.id === profile.id);
+  const index = items.findIndex(i => i.data.id === item.data.id);
   if (index !== -1) {
-    const updatedProfiles = [...profiles];
-    updatedProfiles[index] = profile;
-    return updatedProfiles;
+    const updatedItems = [...items];
+    updatedItems[index] = item;
+    return updatedItems;
   }
-  return profiles;
+  return items;
 }
 
-function deleteFrom(profiles: (UserProfile[] | undefined) | UserProfile[], profile: UserProfile):
-  (UserProfile[] | undefined) | UserProfile[] {
+function deleteItem(items: UserProfileStoreItem[] | undefined, profile: UserProfile):
+  UserProfileStoreItem[] | undefined {
 
-  if (profiles === undefined) {
-    return profiles;
+  if (items === undefined) {
+    return items;
   }
 
   const id = profile.id;
-  const index = profiles.findIndex(i => i.id === id);
+  const index = items.findIndex(i => i.data.id === id);
   if (index !== -1) {
-    const updatedProfiles = [...profiles];
-    updatedProfiles.splice(index, 1);
-    return updatedProfiles;
+    const updatedItems = [...items];
+    updatedItems.splice(index, 1);
+    return updatedItems;
   } else {
-    return profiles;
+    return items;
   }
 }

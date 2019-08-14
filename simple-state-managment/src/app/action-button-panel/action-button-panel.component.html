@@ -6,7 +6,7 @@
         <i class="fas fa-edit"></i>
       </span>
     </a>
-    <a class="button is-outlined is-small fix-width" 
+    <a class="button is-outlined is-small fix-width"
       [class.is-loading]="isDeleteInProgress"
       (click)="onDelete()">
       <span>Delete</span>
@@ -18,8 +18,8 @@
 </div>
 <div [style.display]="(isEditMode | async) ? '' : 'none'">
   <div class="buttons has-addons">
-    <a class="button is-outlined is-small fix-width" 
-      [class.is-loading]="isSaveInProgress"  
+    <a class="button is-outlined is-small fix-width"
+      [class.is-loading]="isSaveInProgress"
       (click)="onSave()">
       <span>Save</span>
       <span class="icon is-small">

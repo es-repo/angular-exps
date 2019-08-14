@@ -1,9 +1,9 @@
 <div>
   <h2 class="heading">user list</h2>
-  <app-loading-indicator *ngIf="profiles === undefined"></app-loading-indicator>
-  <app-user-profile *ngFor="let p of profiles" 
-    [profile]="p"
-    [actionInProgress]="getProfileActionInProgress(p)"
+  <app-loading-indicator *ngIf="storeItems === undefined"></app-loading-indicator>
+  <app-user-profile *ngFor="let item of storeItems" 
+    [profile]="item.data"
+    [actionInProgress]="item.actionInProgress"
     (save)="onSave($event)"
     (delete)="onDelete($event)"></app-user-profile>
 </div>

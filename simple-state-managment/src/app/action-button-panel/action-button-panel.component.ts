@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, Input, ChangeDetectionStrategy } from '@angular/core';
-import { Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 export type ActionType = 'save' | 'delete';
 
@@ -11,14 +11,24 @@ export type ActionType = 'save' | 'delete';
 })
 export class ActionButtonPanelComponent implements OnInit {
 
-  @Input() actionInProgress: ActionType | undefined = undefined;
+  private actionInProgressValue: ActionType | null = null;
+  @Input()
+  get actionInProgress(): ActionType | null { return this.actionInProgressValue; }
+  set actionInProgress(value: ActionType | null) {
+    this.actionInProgressValue = value;
+    switch (value) {
+      case 'delete': this.isEditMode.next(false); break;
+      case 'save': this.isEditMode.next(true); break;
+      default: this.isEditMode.next(false); break;
+    }
+  }
 
   @Output() save: EventEmitter<undefined> = new EventEmitter();
   @Output() delete: EventEmitter<undefined> = new EventEmitter();
   @Output() cancel: EventEmitter<undefined> = new EventEmitter();
   @Output() edit: EventEmitter<undefined> = new EventEmitter();
 
-  isEditMode: Subject<boolean> = new Subject<boolean>();
+  isEditMode: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   get isSaveInProgress() { return this.actionInProgress === 'save'; }
   get isDeleteInProgress() { return this.actionInProgress === 'delete'; }

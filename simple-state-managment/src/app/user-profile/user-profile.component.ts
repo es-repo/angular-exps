@@ -13,7 +13,7 @@ import { ActionType } from '../action-button-panel/action-button-panel.component
 export class UserProfileComponent implements OnInit {
 
   @Input() profile: UserProfile = new UserProfile();
-  @Input() actionInProgress: ActionType | undefined = undefined;
+  @Input() actionInProgress: ActionType | null = null;
 
   @Output() save: EventEmitter<UserProfile> = new EventEmitter<UserProfile>();
   @Output() delete: EventEmitter<UserProfile> = new EventEmitter<UserProfile>();
@@ -43,12 +43,10 @@ export class UserProfileComponent implements OnInit {
   onSave() {
     const name = splitFullName(this.formGroup.value.fullName);
     const updatedProfile = Object.assign({}, this.profile, name);
-    this.actionInProgress = 'save';
     this.save.emit(updatedProfile);
   }
 
   onDelete() {
-    this.actionInProgress = 'delete';
     this.delete.emit(this.profile);
   }
 

@@ -3,7 +3,7 @@ import { UserProfile } from './user-profile';
 import { OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { UserProfileStoreService } from './user-profile-store.service';
-import { tap } from 'rxjs/operators';
+import { UserProfileStoreItem } from './user-profile-store-item';
 
 @Component({
   selector: 'app-root',
@@ -14,8 +14,7 @@ import { tap } from 'rxjs/operators';
 export class AppComponent implements OnInit {
   title = 'Simple';
 
-  userProfiles$: Observable<UserProfile[] | undefined> = of(undefined);
-  userProfilesDeletingInProgress$: Observable<UserProfile[]> = of([]);
+  userProfilesStoreItems$: Observable<UserProfileStoreItem[] | undefined> = of(undefined);
 
   constructor(
     private userProfileStoreService: UserProfileStoreService
@@ -23,8 +22,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.userProfiles$ = this.userProfileStoreService.getAll();
-    this.userProfilesDeletingInProgress$ = this.userProfileStoreService.getDeletingInProgress();
+    this.userProfilesStoreItems$ = this.userProfileStoreService.getAll();
   }
 
   saveUserProfile(profile: UserProfile) {
