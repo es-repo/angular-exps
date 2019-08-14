@@ -19,7 +19,7 @@ export class UserProfileGridComponent implements OnInit {
   }
 
   onDelete(storeItem: UserProfileStoreItem) {
-    this.profileStoreService.delete(storeItem.data)
+    this.profileStoreService.delete(storeItem.value)
       .subscribe();
   }
 

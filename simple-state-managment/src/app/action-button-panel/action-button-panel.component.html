@@ -1,4 +1,4 @@
-<div [style.display]="(isEditMode | async) ? 'none' : ''">
+<div [style.display]="(isEditMode$ | async) ? 'none' : ''">
   <div class="buttons has-addons">
     <a class="button is-outlined is-small fix-width" (click)="onEdit()">
       <span>Edit</span>
@@ -7,7 +7,7 @@
       </span>
     </a>
     <a class="button is-outlined is-small fix-width"
-      [class.is-loading]="isDeleteInProgress"
+      [class.is-loading]="isDeleteInProgress$ | async"
       (click)="onDelete()">
       <span>Delete</span>
       <span class="icon is-small">
@@ -16,10 +16,10 @@
     </a>
   </div>
 </div>
-<div [style.display]="(isEditMode | async) ? '' : 'none'">
+<div [style.display]="(isEditMode$ | async) ? '' : 'none'">
   <div class="buttons has-addons">
     <a class="button is-outlined is-small fix-width"
-      [class.is-loading]="isSaveInProgress"
+      [class.is-loading]="isSaveInProgress$ | async"
       (click)="onSave()">
       <span>Save</span>
       <span class="icon is-small">

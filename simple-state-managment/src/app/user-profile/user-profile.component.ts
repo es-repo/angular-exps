@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { UserProfile } from '../user-profile';
-import { Subject } from 'rxjs';
+import { Subject, Observable, of } from 'rxjs';
 import { FormBuilder } from '@angular/forms';
 import { ActionType } from '../action-button-panel/action-button-panel.component';
 
@@ -20,6 +20,8 @@ export class UserProfileComponent implements OnInit {
 
   isEditMode: Subject<boolean> = new Subject<boolean>();
 
+  actionInProgress$: Observable<ActionType | null> = of(null);
+
   formGroup = this.formBuilder.group({
     fullName: ['']
   });
@@ -29,6 +31,7 @@ export class UserProfileComponent implements OnInit {
 
   ngOnInit() {
     this.bindForm(this.profile);
+    this.actionInProgress$ = of(this.actionInProgress);
   }
 
   onEdit() {

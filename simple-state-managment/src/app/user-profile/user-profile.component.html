@@ -1,7 +1,7 @@
 <form [formGroup]="formGroup" class="card">
   <div style="float:right;">
     <app-action-button-panel 
-      [actionInProgress]="actionInProgress"
+      [actionInProgress$]="actionInProgress$"
       (edit)="onEdit()" 
       (save)="onSave()"
       (delete)="onDelete()"

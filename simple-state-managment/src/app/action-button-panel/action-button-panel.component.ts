@@ -1,5 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, Input, ChangeDetectionStrategy } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { tap, filter, map } from 'rxjs/operators';
 
 export type ActionType = 'save' | 'delete';
 
@@ -11,41 +12,41 @@ export type ActionType = 'save' | 'delete';
 })
 export class ActionButtonPanelComponent implements OnInit {
 
-  private actionInProgressValue: ActionType | null = null;
-  @Input()
-  get actionInProgress(): ActionType | null { return this.actionInProgressValue; }
-  set actionInProgress(value: ActionType | null) {
-    this.actionInProgressValue = value;
-    switch (value) {
-      case 'delete': this.isEditMode.next(false); break;
-      case 'save': this.isEditMode.next(true); break;
-      default: this.isEditMode.next(false); break;
-    }
-  }
+  @Input() actionInProgress$: Observable<ActionType | null> = of(null);
 
   @Output() save: EventEmitter<undefined> = new EventEmitter();
   @Output() delete: EventEmitter<undefined> = new EventEmitter();
   @Output() cancel: EventEmitter<undefined> = new EventEmitter();
   @Output() edit: EventEmitter<undefined> = new EventEmitter();
 
-  isEditMode: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-
-  get isSaveInProgress() { return this.actionInProgress === 'save'; }
-  get isDeleteInProgress() { return this.actionInProgress === 'delete'; }
+  isEditMode$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  isDeleteInProgress$: Observable<boolean> = of(false);
+  isSaveInProgress$: Observable<boolean> = of(false);
 
   constructor() { }
 
   ngOnInit() {
+    this.actionInProgress$
+      .subscribe(v => {
+      switch (v) {
+        case 'delete': this.isEditMode$.next(false); break;
+        case 'save': this.isEditMode$.next(true); break;
+        default: this.isEditMode$.next(false); break;
+      }
+    });
+
+    this.isDeleteInProgress$ = this.actionInProgress$.pipe(map(v => v === 'delete'));
+    this.isSaveInProgress$ = this.actionInProgress$.pipe(map(v => v === 'save'));
   }
 
   onEdit() {
     this.edit.emit();
-    this.isEditMode.next(true);
+    this.isEditMode$.next(true);
   }
 
   onCancel() {
     this.cancel.emit();
-    this.isEditMode.next(false);
+    this.isEditMode$.next(false);
   }
 
   onSave() {

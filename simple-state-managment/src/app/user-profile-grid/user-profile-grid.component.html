@@ -9,10 +9,10 @@
   </tr>
   <tr *ngFor="let item of storeItems" style="border:lightgrey solid 1px;">
     <td style="padding:2px;vertical-align:middle">
-      <img [src]="item.data.pictureUrl" class="image is-32x32">
+      <img [src]="item.value.pictureUrl" class="image is-32x32">
     </td>
-    <td style="padding:2px;vertical-align:middle">@{{item.data.identity.username}}</td>
-    <td style="padding:2px;vertical-align:middle">{{item.data.firstName | titlecase}} {{item.data.lastName | titlecase}}
+    <td style="padding:2px;vertical-align:middle">@{{item.value.identity.username}}</td>
+    <td style="padding:2px;vertical-align:middle">{{item.value.firstName | titlecase}} {{item.value.lastName | titlecase}}
     </td>
     <td style="float:right">
         <a class="button is-outlined is-small fix-width" 

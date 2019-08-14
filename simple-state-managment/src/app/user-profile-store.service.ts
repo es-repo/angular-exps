@@ -29,19 +29,19 @@ export class UserProfileStoreService {
   save(profile: UserProfile): Observable<UserProfileStoreItem> {
     this.cache.next(
       updateItem(
-        this.cacheValue, { data: profile, actionInProgress: 'save' }));
+        this.cacheValue, { value: profile, actionInProgress: 'save' }));
 
     return this.dataSource.save(profile)
       .pipe(
         tap(() => this.cache.next(
-          updateItem(this.cacheValue, Object.assign({}, { data: profile, actionInProgress: null }))))
+          updateItem(this.cacheValue, Object.assign({}, { value: profile, actionInProgress: null }))))
         );
   }
 
   delete(profile: UserProfile): Observable<any> {
     this.cache.next(
       updateItem(
-        this.cacheValue, { data: profile, actionInProgress: 'delete' }));
+        this.cacheValue, { value: profile, actionInProgress: 'delete' }));
 
     return this.dataSource.delete(profile)
       .pipe(
@@ -64,7 +64,7 @@ function updateItem(items: UserProfileStoreItem[] | undefined, item: UserProfile
     return items;
   }
 
-  const index = items.findIndex(i => i.data.id === item.data.id);
+  const index = items.findIndex(i => i.value.id === item.value.id);
   if (index !== -1) {
     const updatedItems = [...items];
     updatedItems[index] = item;
@@ -81,7 +81,7 @@ function deleteItem(items: UserProfileStoreItem[] | undefined, profile: UserProf
   }
 
   const id = profile.id;
-  const index = items.findIndex(i => i.data.id === id);
+  const index = items.findIndex(i => i.value.id === id);
   if (index !== -1) {
     const updatedItems = [...items];
     updatedItems.splice(index, 1);
